@@ -1,6 +1,7 @@
 const processRequest = data => data.json();
 const baseUrl = 'http://api.auto.ria.com/';
 
+// Converts an object to a query string
 const objectToQueryString = (obj = {}) =>
     Object.keys(obj).reduce((acc, key) => {
         let str = '';
@@ -14,6 +15,7 @@ const objectToQueryString = (obj = {}) =>
         return `${acc}&${str}`;
     }, '?');
 
+// API object
 const API = {
     request: ({ options = {}, endpoint = 'average' }) => {
         const queryString = objectToQueryString(options);
@@ -74,15 +76,15 @@ const API = {
             endpoint: 'colors',
         }),
 
-    getOptions: categoryId =>
+    getOptions: ({ categoryId }) =>
         API.request({
             endpoint: `categories/${categoryId}/options`,
         }),
 
-    getByMark: mark =>
+    getMark: ({ categoryId, mark }) =>
         API.request({
             options: {
-                main_category: 1,
+                main_category: categoryId,
                 marka_id: mark.value,
             },
         }),
