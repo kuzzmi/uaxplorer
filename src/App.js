@@ -8,6 +8,7 @@ import './App.scss'; // just for vim reference
 import './App.css';
 import {
     VictoryScatter,
+    Point,
     // VictoryBar,
     VictoryTooltip,
     VictoryChart,
@@ -43,6 +44,7 @@ class App extends Component {
             'loadInitialFiltersData',
             'loadBodyStyles',
             'loadDataByMark',
+            'handlePointClick',
         ].forEach(bind(this));
     }
 
@@ -55,11 +57,13 @@ class App extends Component {
 
         const {
             main_category: newCategory,
+            marka_id: newMarka,
             color_id: newColors,
         } = this.state.filters;
 
         const {
             main_category: oldCategory,
+            marka_id: oldMarka,
             color_id: oldColors,
         } = prevState.filters;
 
@@ -71,6 +75,11 @@ class App extends Component {
         if (oldColors !== newColors) {
             console.log('new color');
             this.loadDataByMark();
+        }
+
+        if (oldMarka !== newMarka) {
+            console.log('new marka');
+            this.loadMarkModels().then(() => this.loadDataByModel());
         }
     }
 
@@ -109,39 +118,70 @@ class App extends Component {
         }).then(this.updateFiltersData('marks'));
     }
 
-    loadDataByMark() {
-        const getMarkData = marka =>
+    loadMarkModels() {
+        return API.getMarkModels({
+            categoryId: this.state.filters.main_category,
+            markId: this.state.filters.marka_id,
+        }).then(this.updateFiltersData('models'));
+    }
+
+    // This function updates render data filtering and
+    // enhancing incoming data with data-point specific
+    // information
+    updateRenderData = group => data => {
+        // Just ignore all data where no data available
+        if (data.total === 0 ||
+            data.interQuartileMean === null ||
+            data.interQuartileMean > 100000) {
+            return;
+        }
+
+        // Using a function as we are relying on the
+        // previous state, so this ensures we use the
+        // latest one
+        this.setState(prevState => ({
+            data: [
+                ...prevState.data,
+                {
+                    ...data,
+                    group,
+                },
+            ],
+        }));
+    };
+
+    // This function makes a bunch of requests using
+    // current filters, list of options to traverse
+    // and update current data
+    loadData = (array, filterOption) => {
+        const getData = value =>
             API.request({
                 options: {
                     ...this.state.filters,
-                    marka_id: marka.value,
+                    [filterOption]: value.value,
                 }
-            }).then(data => {
+            }).then(this.updateRenderData(value));
 
-                // Just ignore all data where no options
-                // available
-                if (data.interQuartileMean === null ||
-                    data.interQuartileMean > 100000) {
-                    return;
-                }
+        this.setState({
+            data: [],
+        });
 
-                // Using a function as we are relying on the
-                // previous state, so this ensures we use the
-                // latest one
-                this.setState(prevState => ({
-                    data: [
-                        ...prevState.data,
-                        {
-                            ...data,
-                            marka,
-                        },
-                    ],
-                }));
-            });
+        return Promise.all(array.map(getData));
+    }
 
-        const load = marks => Promise.all(marks.map(getMarkData));
+    loadDataByMark() {
+        this.loadData(this.state.filtersData.marks, 'marka_id');
+    }
 
-        load(this.state.filtersData.marks);
+    loadDataByModel() {
+        this.loadData(this.state.filtersData.models, 'model_id');
+    }
+
+    handlePointClick(value) {
+        this.updateFilter({
+            name: 'marka_id',
+            value: value.group.value,
+        });
     }
 
     render() {
@@ -181,12 +221,14 @@ class App extends Component {
                                 />
                             <VictoryScatter
                                 data={ this.state.data }
-                                x="marka.name"
+                                x="group.name"
                                 y="interQuartileMean"
                                 bubbleProperty="total"
-                                labels={ data => `${data.marka.name} - ${data.total} - ${data.interQuartileMean}` }
+                                scale="log"
+                                labels={ data => `${data.group.name} - ${data.total} - ${data.interQuartileMean}` }
                                 labelComponent={ <VictoryTooltip /> }
                                 maxBubbleSize={ 30 }
+                                dataComponent={ <ClickablePoint onClick={ this.handlePointClick } /> }
                                 />
                         </VictoryChart>
                     </div>
@@ -196,6 +238,14 @@ class App extends Component {
         );
     }
 }
+
+const ClickablePoint = props =>
+    <Point
+        { ...props }
+        events={{
+            onClick: () => props.onClick(props.datum),
+        }}
+        />;
 
 class Filters extends Component {
     render() {
