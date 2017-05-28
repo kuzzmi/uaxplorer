@@ -12,48 +12,17 @@ import React, { Component } from 'react';
 import './App.scss';
 import {
     VictoryScatter,
+    VictoryBar,
     VictoryChart,
     VictoryTheme,
     VictoryAxis,
 } from 'victory';
 
-// TODO: Move to separate service
-const processRequest = data => data.json();
-const baseUrl = 'http://api.auto.ria.com/';
-
-const API = {
-    request: options => fetch(baseUrl + options).then(processRequest),
-};
-// ------------------------------
+import API from './api.js';
 
 // TODO: Move to helpers
 const normalize = name => array => array.reduce((acc, obj) => ({ ...acc, [obj[name]]: obj }), {});
-
-const getByMark = mark => API.request(`average?marka_id=${ mark.value }`);
 // ------------------------------
-
-        // API.request('average?marka_id=79')
-        //     .then(data => {
-        //         const {
-        //             prices,
-        //             percentiles,
-        //         } = data;
-        //
-        //         const percentilesToRender = Object.keys(percentiles).map(k => ({
-        //             x: k,
-        //             y: percentiles[k],
-        //         }));
-        //
-        //         const pricesToRender =
-        //             prices.map(a => parseInt(a, 10))
-        //                   .sort((a, b) => a > b ? 1 : -1)
-        //                   .map((p, i) => ({ x: i, y: p }));
-        //
-        //         this.setState({
-        //             percentiles: percentilesToRender,
-        //             prices: pricesToRender,
-        //         });
-        //     });
 
 class App extends Component {
     constructor(props) {
@@ -67,7 +36,17 @@ class App extends Component {
     componentDidMount() {
 
         const getMarkData = m =>
-            getByMark(m).then(data => {
+            API.getByMark(m).then(data => {
+
+                // Just ignore all data where no options
+                // available
+                if (data.total === 0) {
+                    return;
+                }
+
+                // Using a function as we are relying on the
+                // previous state, so this ensures we use the
+                // latest one
                 this.setState(prevState => ({
                     data: [
                         ...prevState.data,
@@ -79,8 +58,9 @@ class App extends Component {
                 }));
             });
 
-        API.request('categories/1/marks')
-            .then(marks => Promise.all(marks.map(getMarkData)));
+        API.getMarks({
+            categoryId: 1,
+        }).then(marks => Promise.all(marks.slice(0, 50).map(getMarkData)));
     }
 
     render() {
@@ -88,6 +68,7 @@ class App extends Component {
             <div className="App">
                 <VictoryChart
                     theme={ VictoryTheme.material }
+                    height={ 300 }
                     >
                     <VictoryAxis
                         style={{
@@ -99,23 +80,25 @@ class App extends Component {
                         />
                     <VictoryAxis
                         dependentAxis
+                        scale="sqrt"
                         style={{
                             tickLabels: {
                                 fontSize: 10,
                             },
                         }}
                         />
-                    <VictoryScatter
+                    <VictoryBar
                         data={ this.state.data }
                         x="manufacturer"
                         y="interQuartileMean"
-                        bubbleProperty="total"
-                        maxBubbleSize={ 10 }
                         />
                 </VictoryChart>
             </div>
         );
     }
 }
+
+                        // bubbleProperty="total"
+                        // maxBubbleSize={ 10 }
 
 export default App;
