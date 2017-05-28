@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "basscss": "^8.0.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-typeahead": "kuzzmi/react-typeahead",
     "victory": "^0.20.0"
   },
   "devDependencies": {

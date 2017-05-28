@@ -1,17 +1,13 @@
 /*
  * What car to buy?
- *
- * 1. I want to see a chart with:
- *      Manufacturer/Count -> Manufacturer+Model/Count
- *      To do this I need:
- *      1. get list of car manufacturers
- *      2. get list of average prices for each manufacturer and count of offers
  */
 
 import React, { Component } from 'react';
-import './App.scss';
+import 'basscss/css/basscss.css';
+import './App.scss'; // just for vim reference
+import './App.css';
 import {
-    VictoryScatter,
+    // VictoryScatter,
     VictoryBar,
     VictoryChart,
     VictoryTheme,
@@ -19,86 +15,200 @@ import {
 } from 'victory';
 
 import API from './api.js';
+import FilterTypeahead from './FilterTypeahead.js';
+import Footer from './Footer.js';
 
 // TODO: Move to helpers
-const normalize = name => array => array.reduce((acc, obj) => ({ ...acc, [obj[name]]: obj }), {});
+// const normalize = name => array => array.reduce((acc, obj) => ({ ...acc, [obj[name]]: obj }), {});
 // ------------------------------
+        //
+        // const getMarkData = mark =>
+        //     API.getByMark({
+        //         mark,
+        //     }).then(data => {
+        //
+        //         // Just ignore all data where no options
+        //         // available
+        //         if (data.total === 0) {
+        //             return;
+        //         }
+        //
+        //         // Using a function as we are relying on the
+        //         // previous state, so this ensures we use the
+        //         // latest one
+        //         this.setState(prevState => ({
+        //             data: [
+        //                 ...prevState.data,
+        //                 {
+        //                     manufacturer: mark.name,
+        //                     ...data,
+        //                 },
+        //             ],
+        //         }));
+        //     });
+        //
+        // // API.getMarks({ categoryId: 1 }).then(marks => Promise.all(marks.slice(0, 50).map(getMarkData)));
 
 class App extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            filters: {},
+
+            filtersData: {
+                fuels: [],
+                categories: [],
+                colors: [],
+                states: [],
+            },
+
             data: [],
         };
+
+        this.loadInitialFiltersData = this.loadInitialFiltersData.bind(this);
+        this.updateFilter = this.updateFilter.bind(this);
     }
 
     componentDidMount() {
+        this.loadInitialFiltersData();
+    }
 
-        const getMarkData = m =>
-            API.getByMark(m).then(data => {
+    loadInitialFiltersData() {
+        const setFilterData = name => data => this.setState(prevState => ({
+            ...prevState,
+            filtersData: {
+                ...prevState.filtersData,
+                [name]: data,
+            },
+        }));
 
-                // Just ignore all data where no options
-                // available
-                if (data.total === 0) {
-                    return;
-                }
+        API.getCategories().then(setFilterData('categories'));
+        API.getColors().then(setFilterData('colors'));
+        API.getFuels().then(setFilterData('fuels'));
+        API.getStates().then(setFilterData('states'));
+    }
 
-                // Using a function as we are relying on the
-                // previous state, so this ensures we use the
-                // latest one
-                this.setState(prevState => ({
-                    data: [
-                        ...prevState.data,
-                        {
-                            manufacturer: m.name,
-                            ...data,
-                        },
-                    ],
-                }));
-            });
+    componentDidUpdate(prevProps, prevState) {
+        console.log(this.state.filters);
 
-        API.getMarks({
-            categoryId: 1,
-        }).then(marks => Promise.all(marks.slice(0, 50).map(getMarkData)));
+        const {
+            main_category: oldCategory,
+        } = this.state.filters;
+        const {
+            main_category: newCategory,
+        } = prevState.filters;
+
+        if (oldCategory !== newCategory) {
+            console.log('New category');
+        }
+
+
+    }
+
+    updateFilter({ name, value }) {
+        this.setState(prevState => ({
+            ...prevState,
+            filters: {
+                ...prevState.filters,
+                [name]: value,
+            },
+        }));
     }
 
     render() {
         return (
             <div className="App">
-                <VictoryChart
-                    theme={ VictoryTheme.material }
-                    height={ 300 }
-                    >
-                    <VictoryAxis
-                        style={{
-                            tickLabels: {
-                                fontSize: 10,
-                                angle: -90,
-                            },
-                        }}
+                <div className="flex">
+                    <Filters
+                        options={ this.state.filtersData }
+                        onFilterUpdate={ this.updateFilter }
                         />
-                    <VictoryAxis
-                        dependentAxis
-                        scale="sqrt"
-                        style={{
-                            tickLabels: {
-                                fontSize: 10,
-                            },
-                        }}
-                        />
-                    <VictoryBar
-                        data={ this.state.data }
-                        x="manufacturer"
-                        y="interQuartileMean"
-                        />
-                </VictoryChart>
+                    <div>
+                        <VictoryChart
+                            theme={ VictoryTheme.material }
+                            width={ 500 }
+                            height={ 300 }
+                            style={{
+                                width: 500,
+                                height: 300,
+                            }}
+                            >
+                            <VictoryAxis
+                                style={{
+                                    tickLabels: {
+                                        fontSize: 10,
+                                        angle: -90,
+                                    },
+                                }}
+                                />
+                            <VictoryAxis
+                                dependentAxis
+                                scale="sqrt"
+                                style={{
+                                    tickLabels: {
+                                        fontSize: 10,
+                                    },
+                                }}
+                                />
+                            <VictoryBar
+                                data={ this.state.data }
+                                x="manufacturer"
+                                y="interQuartileMean"
+                                />
+                        </VictoryChart>
+                    </div>
+                </div>
+                <Footer />
             </div>
         );
     }
 }
 
-                        // bubbleProperty="total"
-                        // maxBubbleSize={ 10 }
+class Filters extends Component {
+    render() {
+        const {
+            options: {
+                categories,
+                fuels,
+                colors,
+                states,
+            },
+            onFilterUpdate,
+        } = this.props;
+
+        return (
+            <div className="Filters">
+                <FilterTypeahead
+                    options={ categories }
+                    name="main_category"
+                    label="Category"
+                    onOptionSelected={ onFilterUpdate }
+                    />
+                <FilterTypeahead
+                    options={ fuels }
+                    name="fuels"
+                    label="Fuels"
+                    multiple={ true }
+                    onOptionSelected={ onFilterUpdate }
+                    />
+                <FilterTypeahead
+                    options={ colors }
+                    name="color"
+                    label="Color"
+                    multiple={ true }
+                    onOptionSelected={ onFilterUpdate }
+                    />
+                <FilterTypeahead
+                    options={ states }
+                    name="states"
+                    multiple={ true }
+                    label="States"
+                    onOptionSelected={ onFilterUpdate }
+                    />
+            </div>
+        );
+    }
+}
 
 export default App;
