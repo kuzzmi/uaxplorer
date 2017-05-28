@@ -12,7 +12,7 @@ const objectToQueryString = (obj = {}) =>
         } else {
             str = `${key}=${obj[key]}`;
         }
-        return `${acc}&${str}`;
+        return `${acc}${ acc === '?' ? '' : '&' }${str}`;
     }, '?');
 
 // API object
@@ -21,9 +21,7 @@ const API = {
         const queryString = objectToQueryString(options);
         const url = [baseUrl, endpoint, queryString].join('');
 
-        return fetch(url, {
-            method: 'GET',
-        }).then(processRequest);
+        return fetch(url, { method: 'GET' }).then(processRequest);
     },
 
     getCategories: () =>
