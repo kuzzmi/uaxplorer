@@ -41,7 +41,7 @@ const API = {
 
     getMarkModels: ({ categoryId, markId }) =>
         API.request({
-            endpoint: `categories/${categoryId}/marks/${markId}`,
+            endpoint: `categories/${categoryId}/marks/${markId}/models`,
         }),
 
     getStates: () =>
