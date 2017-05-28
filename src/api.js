@@ -1,5 +1,5 @@
 const processRequest = data => data.json();
-const baseUrl = 'http://api.auto.ria.com/';
+const baseUrl = 'https://api.auto.ria.com/';
 
 // Converts an object to a query string
 const objectToQueryString = (obj = {}) =>
