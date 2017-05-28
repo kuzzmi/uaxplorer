@@ -2,6 +2,7 @@
   "name": "uaxplorer",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://demo.kuzzmi.com/uaxplorer/",
   "dependencies": {
     "basscss": "^8.0.3",
     "react": "^15.5.4",
