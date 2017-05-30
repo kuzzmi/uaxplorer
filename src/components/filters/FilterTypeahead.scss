@@ -1,0 +1,26 @@
+.FilterTypeahead {
+    .typeahead {
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #F3F3F3;
+            border-radius: 4px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 0.85em;
+            background-color: #FFFFFF;
+            color: #3C3C3C;
+
+            transition: all .12s ease-in;
+
+            &:focus {
+                outline: none;
+                border: 2px solid #38C6FF;
+            }
+        }
+        .typeahead-selector {
+            background-color: #FFFFFF;
+            max-height: 250px;
+            overflow: auto;
+        }
+    }
+}

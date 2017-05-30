@@ -16,17 +16,11 @@ import {
     VictoryAxis,
 } from 'victory';
 
-import API from './api.js';
-import FilterTypeahead from './FilterTypeahead.js';
-import Footer from './Footer.js';
-
-// TODO: Move to helpers
-// const normalize = name => array => array.reduce((acc, obj) => ({ ...acc, [obj[name]]: obj }), {});
-const bind =context => name => context[name] = context[name].bind(context);
-// ------------------------------
-        //
-        //
-        // // API.getMarks({ categoryId: 1 }).then();
+import API from '../../services/api.js';
+import Footer from '../footer';
+import Header from '../header';
+import Filters from '../filters';
+import { bind } from '../../utils.js';
 
 class App extends Component {
     constructor(props) {
@@ -44,6 +38,8 @@ class App extends Component {
             'loadInitialFiltersData',
             'loadBodyStyles',
             'loadDataByMark',
+            'applyFilters',
+            'resetFilters',
             'handlePointClick',
         ].forEach(bind(this));
     }
@@ -83,6 +79,9 @@ class App extends Component {
         }
     }
 
+    // Updates data used for filter inputs.
+    // name represents a key under which the data will be preserved
+    // data is ... data
     updateFiltersData = name => data => this.setState(prevState => ({
         ...prevState,
         filtersData: {
@@ -91,6 +90,10 @@ class App extends Component {
         },
     }));
 
+    // Updates fiters that will be applied to the API URL
+    // name is API compatible filter name
+    // value is value
+    // TODO: add multiple filters add/remove functionality
     updateFilter = ({ name, value }) => this.setState(prevState => ({
         ...prevState,
         filters: {
@@ -99,6 +102,7 @@ class App extends Component {
         },
     }));
 
+    // Populates inputs on application start
     loadInitialFiltersData() {
         API.getCategories().then(this.updateFiltersData('categories'));
         API.getColors().then(this.updateFiltersData('colors'));
@@ -106,18 +110,21 @@ class App extends Component {
         API.getStates().then(this.updateFiltersData('states'));
     }
 
+    // When we have a category selected we can load body types
     loadBodyStyles() {
         API.getBodyStyles({
             categoryId: this.state.filters.main_category,
         }).then(this.updateFiltersData('bodyStyles'));
     }
 
+    // ...and manufacturers
     loadMarks() {
         API.getMarks({
             categoryId: this.state.filters.main_category,
         }).then(this.updateFiltersData('marks'));
     }
 
+    // When manufacturer is selected we can query its models
     loadMarkModels() {
         return API.getMarkModels({
             categoryId: this.state.filters.main_category,
@@ -177,6 +184,21 @@ class App extends Component {
         this.loadData(this.state.filtersData.models, 'model_id');
     }
 
+    applyFilters() {
+        if (!!this.state.filters.marka_id) {
+            this.loadDataByModel();
+        } else {
+            this.loadDataByMark();
+        }
+    }
+
+    resetFilters() {
+        this.setState(prevState => ({
+            ...prevState,
+            filters: {},
+        }));
+    }
+
     handlePointClick(value) {
         this.updateFilter({
             name: 'marka_id',
@@ -186,21 +208,18 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="flex">
+            <div className="App flex flex-column">
+                <Header />
+                <div className="body mx2">
                     <Filters
                         options={ this.state.filtersData }
                         onFilterUpdate={ this.updateFilter }
+                        onApplyFiltersClick={ this.applyFilters }
+                        onResetFiltersClick={ this.resetFilters }
                         />
-                    <div>
+                    <div className="hide">
                         <VictoryChart
                             theme={ VictoryTheme.material }
-                            width={ 1000 }
-                            height={ 600 }
-                            style={{
-                                width: 1000,
-                                height: 600,
-                            }}
                             >
                             <VictoryAxis
                                 style={{
@@ -225,7 +244,7 @@ class App extends Component {
                                 y="interQuartileMean"
                                 bubbleProperty="total"
                                 scale="log"
-                                labels={ data => `${data.group.name} - ${data.total} - ${data.interQuartileMean}` }
+                                labels={ data => `Model: ${data.group.name}\r\nTotal: ${data.total}\r\nInterquartile Mean: ${~~data.interQuartileMean}` }
                                 labelComponent={ <VictoryTooltip /> }
                                 maxBubbleSize={ 30 }
                                 dataComponent={ <ClickablePoint onClick={ this.handlePointClick } /> }
@@ -243,76 +262,9 @@ const ClickablePoint = props =>
     <Point
         { ...props }
         events={{
+            ...props.events,
             onClick: () => props.onClick(props.datum),
         }}
         />;
-
-class Filters extends Component {
-    render() {
-        const {
-            options: {
-                categories,
-                bodyStyles,
-                marks,
-                fuels,
-                colors,
-                states,
-                cities,
-            },
-            onFilterUpdate,
-        } = this.props;
-
-        return (
-            <div className="Filters">
-                <FilterTypeahead
-                    options={ categories }
-                    name="main_category"
-                    label="Категория"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ bodyStyles }
-                    name="body_id"
-                    label="Тип кузова"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ marks }
-                    name="mark_id"
-                    label="Марки"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ fuels }
-                    name="fuel_id"
-                    label="Виды топлива"
-                    multiple={ true }
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ colors }
-                    name="color_id"
-                    label="Цвет"
-                    multiple={ true }
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ states }
-                    name="state_id"
-                    multiple={ true }
-                    label="Область"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ cities }
-                    name="city_id"
-                    multiple={ true }
-                    label="Города"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-            </div>
-        );
-    }
-}
 
 export default App;

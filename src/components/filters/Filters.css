@@ -1,0 +1,27 @@
+.Filters {
+  background-color: #FFFFFF;
+  padding: 15px 25px;
+  margin: 5px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.1);
+  display: inline-block; }
+  .Filters .footer {
+    border-top: 2px solid #F3F3F3; }
+    .Filters .footer .button {
+      padding: 11px 16px;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Fira Sans', sans-serif;
+      text-transform: uppercase;
+      font-size: 0.7em;
+      cursor: pointer;
+      transition: all .12s ease-in; }
+      .Filters .footer .button.button-primary {
+        background-color: #FF4386;
+        color: #FFFFFF; }
+        .Filters .footer .button.button-primary:hover {
+          opacity: 0.8; }
+      .Filters .footer .button.button-default {
+        background-color: transparent; }
+        .Filters .footer .button.button-default:hover {
+          background-color: #F3F3F3; }

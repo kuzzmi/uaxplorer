@@ -1,0 +1,9 @@
+.Footer {
+  background-color: #FFFFFF; }
+  .Footer .muted {
+    color: #ACACAC; }
+  .Footer .heart {
+    color: #FF0000; }
+  .Footer a {
+    color: #FF4386;
+    text-decoration: none; }

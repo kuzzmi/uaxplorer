@@ -4,6 +4,7 @@ import { Typeahead } from 'react-typeahead';
 import './FilterTypeahead.scss';
 import './FilterTypeahead.css';
 
+
 class FilterTypeahead extends Component {
     render() {
         const {
@@ -17,17 +18,15 @@ class FilterTypeahead extends Component {
 
         return (
             <div className="FilterTypeahead mb2">
-                <div>
-                    <label htmlFor={ elementId }>{ label }</label>
-                </div>
                 <div id={ elementId }>
                     <Typeahead
+                        placeholder={ label }
                         options={ options }
                         filterOption="name"
                         displayOption="name"
                         showOptionsWhenEmpty={ true }
                         customClasses={{
-                            results: 'list-reset',
+                            results: 'list-reset mt0',
                         }}
                         onOptionSelected={ value => {
                             onOptionSelected({
