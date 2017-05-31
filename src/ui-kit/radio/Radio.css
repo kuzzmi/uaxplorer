@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .radio input[type="radio"] {
   position: absolute;
   left: -9999px; }
@@ -35,7 +34,5 @@
   .radio input[type="radio"]:disabled:checked + label:before {
     background-position: -48px 0; }
   .radio input[type="radio"]:checked + label:before {
-    content: "•";
-    color: #FFFFFF;
-    background-color: #FF4386;
-    border: none; }
+    border-color: #FF4386;
+    border-width: 5px; }

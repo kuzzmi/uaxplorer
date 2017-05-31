@@ -57,10 +57,8 @@ $radio-width: 16px;
         // Checked
         &:checked + label {
             &:before {
-                content: "•";
-                color: #FFFFFF;
-                background-color: #FF4386;
-                border: none;
+                border-color: #FF4386;
+                border-width: 5px;
             }
         }
     }
