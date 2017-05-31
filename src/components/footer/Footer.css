@@ -3,7 +3,9 @@
   .Footer .muted {
     color: #ACACAC; }
   .Footer .heart {
-    color: #FF0000; }
+    color: #FF0000;
+    font-size: 18px;
+    margin: 0 5px; }
   .Footer a {
     color: #FF4386;
     text-decoration: none; }

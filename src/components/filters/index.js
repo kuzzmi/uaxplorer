@@ -5,7 +5,7 @@ import './Filters.scss';
 import './Filters.css';
 
 import Button from '../../ui-kit/button';
-import Checkbox from '../../ui-kit/checkbox';
+import Checkbox, { ColorCheckbox } from '../../ui-kit/checkbox';
 import Radio from '../../ui-kit/radio';
 
 class Filters extends Component {
@@ -27,51 +27,47 @@ class Filters extends Component {
 
         return (
             <div className="Filters">
-                <Checkbox
-                    name="test"
-                    label="Галогенные фары"
+                <div>
+                    <p className="filter-title pb2">
+                        Категория
+                    </p>
+                    <FilterTypeahead
+                        options={ categories }
+                        name="main_category"
+                        label="Категория"
+                        onOptionSelected={ onFilterUpdate }
+                        />
+                </div>
+                <div>
+                    <p className="filter-title pb2">
+                        Тип кузова
+                    </p>
+                    <FilterTypeahead
+                        options={ bodyStyles }
+                        name="body_id"
+                        label="Тип кузова"
+                        onOptionSelected={ onFilterUpdate }
+                        />
+                </div>
+                <ColorFilter
+                    colors={ colors }
+                    onClick={ onFilterUpdate }
                     />
-                <Radio
-                    name="foobar"
-                    label="Фары"
-                    />
-                <Radio
-                    name="foobar"
-                    label="Фары"
-                    />
-                <Radio
-                    name="foobar"
-                    label="Фары"
-                    />
-                <FilterTypeahead
-                    options={ categories }
-                    name="main_category"
-                    label="Категория"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ bodyStyles }
-                    name="body_id"
-                    label="Тип кузова"
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ marks }
-                    name="mark_id"
-                    label="Марки"
-                    onOptionSelected={ onFilterUpdate }
-                    />
+                <div>
+                    <p className="filter-title pb2">
+                        Марка производителя
+                    </p>
+                    <FilterTypeahead
+                        options={ marks }
+                        name="mark_id"
+                        label="Марки"
+                        onOptionSelected={ onFilterUpdate }
+                        />
+                </div>
                 <FilterTypeahead
                     options={ fuels }
                     name="fuel_id"
                     label="Виды топлива"
-                    multiple={ true }
-                    onOptionSelected={ onFilterUpdate }
-                    />
-                <FilterTypeahead
-                    options={ colors }
-                    name="color_id"
-                    label="Цвет"
                     multiple={ true }
                     onOptionSelected={ onFilterUpdate }
                     />
@@ -88,6 +84,21 @@ class Filters extends Component {
                     multiple={ true }
                     label="Города"
                     onOptionSelected={ onFilterUpdate }
+                    />
+                <Checkbox
+                    name="test"
+                    label="Галогенные фары"
+                    value="1"
+                    />
+                <Radio
+                    name="test"
+                    label="Галогенные фары"
+                    value="2"
+                    />
+                <Radio
+                    name="test"
+                    label="Галогенные фары"
+                    value="3"
                     />
                 <div className="footer py2 center">
                     <div className="mb1">
@@ -107,5 +118,26 @@ class Filters extends Component {
         );
     }
 }
+
+const ColorFilter = ({
+    colors = [],
+    onClick,
+}) => (
+    <div style={{ maxWidth: 250 }}>
+        <p className="filter-title pb2">
+            Цвет
+        </p>
+        {
+            colors.map(color => (
+                <ColorCheckbox
+                    name={ color.value }
+                    key={ color.value }
+                    color={ color.value }
+                    tooltip={ color.name }
+                    />
+            ))
+        }
+    </div>
+);
 
 export default Filters;
