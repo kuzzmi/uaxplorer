@@ -4,7 +4,6 @@ import { Typeahead } from 'react-typeahead';
 import './FilterTypeahead.scss';
 import './FilterTypeahead.css';
 
-
 class FilterTypeahead extends Component {
     render() {
         const {
@@ -37,7 +36,7 @@ class FilterTypeahead extends Component {
                         />
                 </div>
             </div>
-        )
+        );
     }
 }
 

@@ -27,9 +27,208 @@ class App extends Component {
         super(props);
 
         this.state = {
-            filters: {},
+            filters: {
+                color_id: [15, 3],
+            },
 
-            filtersData: {},
+            filtersData: {
+                categories: [{
+                    name: 'Легковые',
+                    value: 1,
+                }, {
+                    name: 'Мото',
+                    value: 2,
+                }, {
+                    name: 'Водный транспорт',
+                    value: 3,
+                }, {
+                    name: 'Спецтехника',
+                    value: 4,
+                }, {
+                    name: 'Прицеп',
+                    value: 5,
+                }, {
+                    name: 'Грузовик',
+                    value: 6,
+                }, {
+                    name: 'Автобус',
+                    value: 7,
+                }, {
+                    name: 'Автодом',
+                    value: 8,
+                }, {
+                    name: 'Воздушный транспорт',
+                    value: 9,
+                }],
+                colors: [{
+                    name: 'Бежевый',
+                    value: 1,
+                }, {
+                    name: 'Черный',
+                    value: 2,
+                }, {
+                    name: 'Синий',
+                    value: 3,
+                }, {
+                    name: 'Бронзовый',
+                    value: 4,
+                }, {
+                    name: 'Коричневый',
+                    value: 5,
+                }, {
+                    name: 'Золотой',
+                    value: 6,
+                }, {
+                    name: 'Зеленый',
+                    value: 7,
+                }, {
+                    name: 'Серый',
+                    value: 8,
+                }, {
+                    name: 'Апельсин',
+                    value: 9,
+                }, {
+                    name: 'Магнолии',
+                    value: 10,
+                }, {
+                    name: 'Розовый',
+                    value: 11,
+                }, {
+                    name: 'Фиолетовый',
+                    value: 12,
+                }, {
+                    name: 'Красный',
+                    value: 13,
+                }, {
+                    name: 'Серебряный',
+                    value: 14,
+                }, {
+                    name: 'Белый',
+                    value: 15,
+                }, {
+                    name: 'Желтый',
+                    value: 16,
+                }, {
+                    name: 'Голубой',
+                    value: 17,
+                }, {
+                    name: 'Вишнёвый',
+                    value: 18,
+                }, {
+                    name: 'Сафари',
+                    value: 19,
+                }, {
+                    name: 'Гранатовый',
+                    value: 20,
+                }, {
+                    name: 'Асфальт',
+                    value: 21,
+                }],
+                fuels: [{
+                    name: 'Бензин',
+                    value: 1,
+                }, {
+                    name: 'Дизель',
+                    value: 2,
+                }, {
+                    name: 'Газ',
+                    value: 3,
+                }, {
+                    name: 'Газ/бензин',
+                    value: 4,
+                }, {
+                    name: 'Гибрид',
+                    value: 5,
+                }, {
+                    name: 'Электро',
+                    value: 6,
+                }, {
+                    name: 'Другое',
+                    value: 7,
+                }, {
+                    name: 'Газ метан',
+                    value: 8,
+                }, {
+                    name: 'Газ пропан-бутан',
+                    value: 9,
+                }],
+                states: [{
+                    name: 'Винницкая',
+                    value: 1,
+                }, {
+                    name: 'Волынская',
+                    value: 18,
+                }, {
+                    name: 'Днепропетровская',
+                    value: 11,
+                }, {
+                    name: 'Донецкая',
+                    value: 13,
+                }, {
+                    name: 'Житомирская',
+                    value: 2,
+                }, {
+                    name: 'Закарпатская',
+                    value: 22,
+                }, {
+                    name: 'Запорожская',
+                    value: 14,
+                }, {
+                    name: 'Ивано-Франковская',
+                    value: 15,
+                }, {
+                    name: 'Киевская',
+                    value: 10,
+                }, {
+                    name: 'Кировоградская',
+                    value: 16,
+                }, {
+                    name: 'Луганская',
+                    value: 17,
+                }, {
+                    name: 'Львовская',
+                    value: 5,
+                }, {
+                    name: 'Николаевская',
+                    value: 19,
+                }, {
+                    name: 'Одесская',
+                    value: 12,
+                }, {
+                    name: 'Полтавская',
+                    value: 20,
+                }, {
+                    name: 'Республика Крым',
+                    value: 21,
+                }, {
+                    name: 'Ровенская',
+                    value: 9,
+                }, {
+                    name: 'Сумская',
+                    value: 8,
+                }, {
+                    name: 'Тернопольская',
+                    value: 3,
+                }, {
+                    name: 'Харьковская',
+                    value: 7,
+                }, {
+                    name: 'Херсонская',
+                    value: 23,
+                }, {
+                    name: 'Хмельницкая',
+                    value: 4,
+                }, {
+                    name: 'Черкасская',
+                    value: 24,
+                }, {
+                    name: 'Черниговская',
+                    value: 6,
+                }, {
+                    name: 'Черновицкая',
+                    value: 25,
+                }],
+            },
 
             data: [],
         };
@@ -45,10 +244,11 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.loadInitialFiltersData();
+        // this.loadInitialFiltersData();
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // eslint-disable-next-line
         console.log(this.state.filters);
 
         const {
@@ -69,11 +269,13 @@ class App extends Component {
         }
 
         if (oldColors !== newColors) {
+            // eslint-disable-next-line
             console.log('new color');
             this.loadDataByMark();
         }
 
         if (oldMarka !== newMarka) {
+            // eslint-disable-next-line
             console.log('new marka');
             this.loadMarkModels().then(() => this.loadDataByModel());
         }
@@ -166,7 +368,7 @@ class App extends Component {
                 options: {
                     ...this.state.filters,
                     [filterOption]: value.value,
-                }
+                },
             }).then(this.updateRenderData(value));
 
         this.setState({
@@ -213,6 +415,7 @@ class App extends Component {
                 <div className="body mx2">
                     <Filters
                         options={ this.state.filtersData }
+                        selected={ this.state.filters }
                         onFilterUpdate={ this.updateFilter }
                         onApplyFiltersClick={ this.applyFilters }
                         onResetFiltersClick={ this.resetFilters }

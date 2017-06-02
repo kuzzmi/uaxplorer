@@ -11,4 +11,4 @@ export default ({
     <button className={ `button button-${type}` }
         onClick={ onClick }>
         { children }
-    </button>
+    </button>;

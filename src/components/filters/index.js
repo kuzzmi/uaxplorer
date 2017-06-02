@@ -20,6 +20,10 @@ class Filters extends Component {
                 states,
                 cities,
             },
+            selected: {
+                color_id,
+                main_category,
+            },
             onFilterUpdate,
             onApplyFiltersClick,
             onResetFiltersClick,
@@ -35,6 +39,7 @@ class Filters extends Component {
                         options={ categories }
                         name="main_category"
                         label="Категория"
+                        selected={ main_category }
                         onOptionSelected={ onFilterUpdate }
                         />
                 </div>
@@ -51,6 +56,7 @@ class Filters extends Component {
                 </div>
                 <ColorFilter
                     colors={ colors }
+                    selected={ color_id }
                     onClick={ onFilterUpdate }
                     />
                 <div>
@@ -121,6 +127,7 @@ class Filters extends Component {
 
 const ColorFilter = ({
     colors = [],
+    selected = [],
     onClick,
 }) => (
     <div style={{ maxWidth: 250 }}>
@@ -134,6 +141,7 @@ const ColorFilter = ({
                     key={ color.value }
                     color={ color.value }
                     tooltip={ color.name }
+                    checked={ selected.indexOf(color.value) !== -1 }
                     />
             ))
         }

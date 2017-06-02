@@ -11,6 +11,8 @@
     "victory": "^0.20.0"
   },
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-plugin-react": "^7.0.1",
     "gh-pages": "^1.0.0",
     "node-sass-chokidar": "^0.0.1",
     "npm-run-all": "^4.0.2",
@@ -24,6 +26,7 @@
     "build": "react-scripts build",
     "publish": "git subtree push --prefix build origin gh-pages",
     "test": "npm run build-css && react-scripts test --env=jsdom",
+    "lint": "eslint src/",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
