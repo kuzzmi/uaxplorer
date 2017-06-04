@@ -78,7 +78,10 @@ export const ColorCheckbox = ({
         <input
             id={ name }
             type="checkbox"
-            defaultChecked={ checked }
+            checked={ checked }
+            onChange={ () => {
+                onChange(color);
+            }}
             />
         <label htmlFor={ name }
             className={

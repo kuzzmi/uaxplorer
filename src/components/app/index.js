@@ -271,7 +271,7 @@ class App extends Component {
         if (oldColors !== newColors) {
             // eslint-disable-next-line
             console.log('new color');
-            this.loadDataByMark();
+            // this.loadDataByMark();
         }
 
         if (oldMarka !== newMarka) {

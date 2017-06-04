@@ -55,9 +55,10 @@ class Filters extends Component {
                         />
                 </div>
                 <ColorFilter
+                    name="color_id"
                     colors={ colors }
                     selected={ color_id }
-                    onClick={ onFilterUpdate }
+                    onChange={ onFilterUpdate }
                     />
                 <div>
                     <p className="filter-title pb2">
@@ -128,7 +129,8 @@ class Filters extends Component {
 const ColorFilter = ({
     colors = [],
     selected = [],
-    onClick,
+    name,
+    onChange,
 }) => (
     <div style={{ maxWidth: 250 }}>
         <p className="filter-title pb2">
@@ -137,11 +139,19 @@ const ColorFilter = ({
         {
             colors.map(color => (
                 <ColorCheckbox
-                    name={ color.value }
+                    name={ `${name}_${color.value}` }
                     key={ color.value }
                     color={ color.value }
                     tooltip={ color.name }
                     checked={ selected.indexOf(color.value) !== -1 }
+                    onChange={ value => {
+                        onChange({
+                            name,
+                            value: selected.indexOf(value) === -1 ?
+                                   [ ...selected, value ] :
+                                   selected.filter(s => s !== value),
+                        });
+                    }}
                     />
             ))
         }
