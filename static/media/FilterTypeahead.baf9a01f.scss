@@ -1,0 +1,57 @@
+.FilterTypeahead {
+    .typeahead {
+        input[type="text"] {
+            width: 250px;
+            padding: 10px 15px;
+            border: 2px solid #F3F3F3;
+            border-radius: 4px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 0.85em;
+            background-color: #FFFFFF;
+            color: #3C3C3C;
+
+            transition: all .12s ease-in;
+
+            &:focus {
+                outline: none;
+                border: 2px solid #38C6FF;
+            }
+        }
+        .typeahead-selector {
+            background-color: #FFFFFF;
+            // max-height: 250px;
+            overflow: auto;
+            position: absolute;
+            z-index: 10;
+            border: 1px solid #E5E5E5;
+            width: 250px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.1);
+
+            animation-name: expand;
+            animation-duration: .12s;
+            animation-timing-function: ease-in;
+            animation-fill-mode: both;
+
+            li {
+                padding: 10px 20px;
+
+                a {
+                    font-size: 0.85em;
+                    color: inherit;
+                    text-decoration: none;
+                }
+
+                &:hover, &:active, &:focus, &.hover {
+                    cursor: pointer;
+                    color: #FFFFFF;
+                    background-color: #FF4386;
+                }
+            }
+        }
+    }
+}
+
+@keyframes expand {
+    from { max-height: 0px; }
+    to { max-height: 250px; }
+}

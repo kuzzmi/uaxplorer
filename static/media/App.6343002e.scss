@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500&amp;subset=cyrillic');
+
+html,
+body {
+    * {
+        box-sizing: border-box;
+    }
+
+    &, #root {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        font-family: 'Fira Sans', sans-serif;
+        font-size: 1em;
+    }
+}
+
+.App {
+    background-color: #FCFCFC;
+    color: #465054;
+    min-height: 100%;
+
+    .body {
+        flex: 1;
+    }
+}
