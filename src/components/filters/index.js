@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import FilterTypeahead from './FilterTypeahead.js';
 
-import './Filters.scss';
 import './Filters.css';
 
 import Button from '../../ui-kit/button';

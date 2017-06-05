@@ -1,11 +1,11 @@
 import React from 'react';
 
-import './Checkbox.scss';
 import './Checkbox.css';
 
 export default ({
     name,
     label,
+    value,
     checked,
     onChange,
 }) => (
@@ -13,7 +13,10 @@ export default ({
         <input
             id={ name }
             type="checkbox"
-            defaultChecked={ true }
+            checked={ checked }
+            onChange={ () => {
+                onChange(value);
+            }}
             />
         <label htmlFor={ name }
             className="align-middle">

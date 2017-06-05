@@ -1,6 +1,5 @@
 import React from 'react';
 
-import './Footer.scss'; // just for vim reference
 import './Footer.css';
 
 const Footer = () => (

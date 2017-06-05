@@ -4,7 +4,6 @@
 
 import React, { Component } from 'react';
 import 'basscss/css/basscss.css';
-import './App.scss'; // just for vim reference
 import './App.css';
 import {
     VictoryScatter,

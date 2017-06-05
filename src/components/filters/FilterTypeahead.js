@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Typeahead } from 'react-typeahead';
 
-import './FilterTypeahead.scss';
 import './FilterTypeahead.css';
 
 class FilterTypeahead extends Component {

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import './Radio.scss';
 import './Radio.css';
 
 export default ({
@@ -15,7 +14,7 @@ export default ({
             name={ name }
             type="radio"
             value={ value }
-            defaultChecked={ true }
+            onChange={ onChange }
             />
         <label htmlFor={ name }
             className="align-middle">
