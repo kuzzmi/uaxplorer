@@ -419,46 +419,56 @@ class App extends Component {
                         onApplyFiltersClick={ this.applyFilters }
                         onResetFiltersClick={ this.resetFilters }
                         />
-                    <div className="hide">
-                        <VictoryChart
-                            theme={ VictoryTheme.material }
-                            >
-                            <VictoryAxis
-                                style={{
-                                    tickLabels: {
-                                        fontSize: 10,
-                                        angle: -90,
-                                    },
-                                }}
-                                />
-                            <VictoryAxis
-                                dependentAxis
-                                scale="sqrt"
-                                style={{
-                                    tickLabels: {
-                                        fontSize: 10,
-                                    },
-                                }}
-                                />
-                            <VictoryScatter
-                                data={ this.state.data }
-                                x="group.name"
-                                y="interQuartileMean"
-                                bubbleProperty="total"
-                                scale="log"
-                                labels={ data => `Model: ${data.group.name}\r\nTotal: ${data.total}\r\nInterquartile Mean: ${~~data.interQuartileMean}` }
-                                labelComponent={ <VictoryTooltip /> }
-                                maxBubbleSize={ 30 }
-                                dataComponent={ <ClickablePoint onClick={ this.handlePointClick } /> }
-                                />
-                        </VictoryChart>
-                    </div>
+                    <Chart
+                        data={ this.state.data }
+                        onClick={ this.handlePointClick }
+                        />
                 </div>
                 <Footer />
             </div>
         );
     }
 }
+
+const Chart = ({
+    data,
+    onClick,
+}) => (
+    <div className="hide">
+        <VictoryChart
+            theme={ VictoryTheme.material }
+            >
+            <VictoryAxis
+                style={{
+                    tickLabels: {
+                        fontSize: 10,
+                        angle: -90,
+                    },
+                }}
+                />
+            <VictoryAxis
+                dependentAxis
+                scale="sqrt"
+                style={{
+                    tickLabels: {
+                        fontSize: 10,
+                    },
+                }}
+                />
+            <VictoryScatter
+                data={ data }
+                x="group.name"
+                y="interQuartileMean"
+                bubbleProperty="total"
+                scale="log"
+                labels={ data => `Model: ${data.group.name}\r\nTotal: ${data.total}\r\nInterquartile Mean: ${~~data.interQuartileMean}` }
+                labelComponent={ <VictoryTooltip /> }
+                maxBubbleSize={ 30 }
+                dataComponent={ <ClickablePoint onClick={ onClick } /> }
+                />
+        </VictoryChart>
+    </div>
+);
 
 const ClickablePoint = props =>
     <Point
