@@ -7,6 +7,8 @@
     "basscss": "^8.0.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-input-range": "^1.1.4",
+    "react-tooltip": "^3.3.0",
     "react-typeahead": "kuzzmi/react-typeahead",
     "victory": "^0.20.0"
   },

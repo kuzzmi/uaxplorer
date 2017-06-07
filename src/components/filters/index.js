@@ -7,6 +7,10 @@ import Button from '../../ui-kit/button';
 import Checkbox, { ColorCheckbox } from '../../ui-kit/checkbox';
 import Radio from '../../ui-kit/radio';
 
+import InputRange from 'react-input-range';
+
+import 'react-input-range/lib/css/index.css';
+
 class Filters extends Component {
     render() {
         const {
@@ -106,6 +110,11 @@ class Filters extends Component {
                     label="Галогенные фары"
                     value="3"
                     />
+                <InputRange
+                    maxValue={ 2017 }
+                    minValue={ 1900 }
+                    value={{ min: 2000, max: 2015 }}
+                    onChange={() => {}} />
                 <div className="footer py2 center">
                     <div className="mb1">
                         <Button

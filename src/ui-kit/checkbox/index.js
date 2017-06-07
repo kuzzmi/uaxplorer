@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
 import './Checkbox.css';
 
@@ -74,6 +75,7 @@ const COLORS = {
 export const ColorCheckbox = ({
     name,
     color,
+    tooltip,
     checked,
     onChange,
 }) => (
@@ -87,6 +89,8 @@ export const ColorCheckbox = ({
             }}
             />
         <label htmlFor={ name }
+            data-tip
+            data-for={ name }
             className={
                 [1, 6, 10, 11, 15, 16, 19].indexOf(color) !== -1 ?
                     'align-middle light-color' :
@@ -96,5 +100,8 @@ export const ColorCheckbox = ({
                 backgroundColor: COLORS[color],
             }}>
         </label>
+        <ReactTooltip id={ name }>
+            <span>{ tooltip }</span>
+        </ReactTooltip>
     </div>
 );
